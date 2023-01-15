@@ -1,7 +1,8 @@
 I particularly appreciate, IoT and networking.
 
 ﹕Bot
-    Use compile.go to debug & build binary.
+    Use make to debug & build binary.
+    Cmd: make
     Args:
         - cmd: get the gcc compilation command line
         - test: compile/debug and show errors.
