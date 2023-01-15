@@ -1,7 +1,9 @@
 # Temp shit
-cnc/*
 script/*
-stuff/*
+stuff/vuln_list/*
+stuff/tools/*
+stuff/go_bot/*
+stuff/exploit/*
 
 # Build files
 bot/script/build/*
