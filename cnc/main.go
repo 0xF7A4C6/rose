@@ -24,6 +24,7 @@ func LoadUsers() {
 		th, _ := strconv.Atoi(items[4])
 		po, _ := strconv.Atoi(items[4])
 		le, _ := strconv.Atoi(items[5])
+		ad, _ := strconv.ParseBool(items[6])
 
 		utils.Users = append(utils.Users, utils.User{
 			Username: items[0],
@@ -33,6 +34,7 @@ func LoadUsers() {
 			Thread:   th,
 			Power:    po,
 			Length:   le,
+			Admin: ad,
 		})
 	}
 

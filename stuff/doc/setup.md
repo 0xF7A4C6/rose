@@ -1,7 +1,7 @@
 # Permissions
 
 > Format:
-> `username,password,api-key,time,threads,power,length`
+> `username,password,api-key,time,threads,power,length,admin`
 
 > Default Args:
 > - username: `x`
@@ -11,3 +11,4 @@
 > - threads: `250`
 > - power: `32`
 > - length: `50`
+> - admin: `false`

@@ -88,20 +88,22 @@ func sendAttack(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if i_threads >= sender.Thread {
-		i_threads = sender.Thread
-	}
+	if !sender.Admin {
+		if i_threads >= sender.Thread {
+			i_threads = sender.Thread
+		}
 
-	if i_power >= sender.Power {
-		i_power = sender.Power
-	}
+		if i_power >= sender.Power {
+			i_power = sender.Power
+		}
 
-	if i_length >= sender.Length {
-		i_length = sender.Length
-	}
+		if i_length >= sender.Length {
+			i_length = sender.Length
+		}
 
-	if i_time >= sender.Time {
-		i_time = sender.Time
+		if i_time >= sender.Time {
+			i_time = sender.Time
+		}
 	}
 
 	if !utils.StringInList(utils.Methods, method) {
