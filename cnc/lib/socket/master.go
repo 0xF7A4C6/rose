@@ -37,9 +37,9 @@ func (m *Master) HandleConnection() {
 		}
 
 		for _, user := range utils.Users {
-			splt := strings.Split(user, ",")
-			if splt[0] == username && splt[1] == password {
+			if user.Username == username && user.Password == password {
 				m.Logged = true
+				m.LoggedUser = user
 			}
 		}
 
@@ -58,7 +58,7 @@ func (m *Master) HandleConnection() {
 	m.ClearConsole()
 
 	for m.Network.Connected {
-		m.Network.Send("botnet: ")
+		m.Network.Send(fmt.Sprintf("%s@botnet: ", m.LoggedUser.Username))
 		success, data := m.Network.Input()
 
 		if !success {

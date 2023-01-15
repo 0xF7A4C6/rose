@@ -20,6 +20,5 @@ var (
 )
 
 var (
-	Users   = []string{}
-	ApiKeys = []string{}
+	Users   = []User{}
 )

@@ -1,6 +1,9 @@
 package socket
 
-import "net"
+import (
+	"cnc/lib/utils"
+	"net"
+)
 
 var (
 	MasterList []*Master
@@ -13,9 +16,10 @@ type Socket struct {
 }
 
 type Master struct {
-	Network   *Socket
-	Logged    bool
-	LogAttemp int
+	Network    *Socket
+	Logged     bool
+	LogAttemp  int
+	LoggedUser utils.User
 }
 
 type Bot struct {

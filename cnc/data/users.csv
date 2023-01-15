@@ -1,2 +1,3 @@
-krill,hackerhere
-clipssender,hackerhere
+krill,hackerhere,bigsecretapikey,120,250,32,50
+clipssender,hackerhere,bigsecretapikey,120,250,32,50
+username,password,api-key,time,threads,power,length

