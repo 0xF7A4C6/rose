@@ -22,7 +22,7 @@ HttpResponse *http_get(char *path, char *address, int port)
 {
     // create socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock == -1)
+    if (sock == FAILURE)
     {
         return NULL;
     }
@@ -40,7 +40,7 @@ HttpResponse *http_get(char *path, char *address, int port)
     server->sin_addr.s_addr = inet_addr(address);
 
     // connect to server
-    if (connect(sock, (struct sockaddr *)server, sizeof(struct sockaddr_in)) == -1)
+    if (connect(sock, (struct sockaddr *)server, sizeof(struct sockaddr_in)) == FAILURE)
     {
         return NULL;
     }
@@ -52,7 +52,7 @@ HttpResponse *http_get(char *path, char *address, int port)
      *  - need to remove 1x \r\n
      */
     char *request = NULL;
-    if (asprintf(&request, "GET %s HTTP/1.1\r\nHost: %s:%d\r\n\r\n\r\n", path, address, port) == -1)
+    if (asprintf(&request, "GET %s HTTP/1.1\r\nHost: %s:%d\r\n\r\n\r\n", path, address, port) == FAILURE)
     {
         return NULL;
     }
@@ -62,7 +62,7 @@ HttpResponse *http_get(char *path, char *address, int port)
     printf("Request: %s", request);
 
     // send http request
-    if (send(sock, request, strlen(request), 0) == -1)
+    if (send(sock, request, strlen(request), 0) == FAILURE)
     {
         return NULL;
     }
@@ -151,12 +151,12 @@ int download_bin(char *filename, char *url)
 {
     char *cmd = NULL;
 
-    if (asprintf(&cmd, "wget -O %s %s || curl -o %s %s", filename, url, filename, url) == -1)
+    if (asprintf(&cmd, "wget -O %s %s || curl -o %s %s", filename, url, filename, url) == FAILURE)
     {
         return FALSE;
     }
 
-    if (system(cmd) == -1)
+    if (system(cmd) == FAILURE)
     {
         return FALSE;
     }
