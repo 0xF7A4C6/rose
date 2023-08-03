@@ -1,4 +1,5 @@
 I particularly appreciate, IoT and networking.
+This is a strong botnet written in C and Golang for fun, it probably doesn't contains every files but yeah.
 
 ﹕Bot
     Use make to debug & build binary.
